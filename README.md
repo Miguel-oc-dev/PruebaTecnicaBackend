@@ -7,15 +7,16 @@ Este proyecto es una aplicación web básica que permite a los usuarios iniciar 
 - Entity Framework
 - HTML, CSS, Bootstrap
 - C#
+- SQL Server
 
 ---
 
 ## Configuración del proyecto
 
 ### Requisitos previos
-1. Tener instalado Visual Studio.
-2. .NET Framework (versión 4.5 o superior).
-3. SQL Server o una base de datos compatible (opcional si se simula una base de datos).
+1.  Visual Studio.
+2. .NET Framework versión 4.8.
+3. SQL Server
 
 ### Estructura principal del proyecto
 - **Controladores:** Manejan la lógica del negocio.
@@ -60,6 +61,13 @@ Este proyecto es una aplicación web básica que permite a los usuarios iniciar 
   - Contiene un formulario estilizado para que los usuarios ingresen su correo y contraseña.
   - Usa `Html.BeginForm` para enviar los datos al servidor.
 
+# Claves para ingresar
+    admin@ejemplo.com
+    12345
+ 
+  ![image](https://github.com/user-attachments/assets/f9955565-e6eb-4aa9-bb7e-56bea864d51b)
+
+
 ```html
 @using (Html.BeginForm()) {
     @Html.AntiForgeryToken()
@@ -94,26 +102,166 @@ public ActionResult Login(Usuario usuario) {
 ```
 
 ### CRUD de eventos
-- **Crear evento:**
-  - Vista: `Create.cshtml`
-  - Permite ingresar detalles como título, descripción, lugar y fecha.
-
-- **Editar evento:**
-  - Vista: `Edit.cshtml`
-  - Usa un formulario similar a "Crear" pero con los datos precargados.
 
 - **Listar eventos:**
   - Vista: `Index.cshtml`
   - Muestra una tabla con los eventos registrados.
+![image](https://github.com/user-attachments/assets/e30dbb15-ba62-48e2-bac0-5e1e6a30603d)
+
+- **Crear evento:**
+  - Vista: `Create.cshtml`
+  - Permite ingresar detalles como título, descripción, lugar y fecha.
+ ![image](https://github.com/user-attachments/assets/663078e0-d24e-48b6-af3f-55d0649b9189)
+
+
+- **Editar evento:**
+  - Vista: `Edit.cshtml`
+  - Usa un formulario similar a "Crear" pero con los datos precargados.
+  ![image](https://github.com/user-attachments/assets/ebfb8bd2-3901-454c-9f26-43a93cfc7d0c)
+
+- **Detalles eventos:**
+  - Vista: `Details.cshtml`
+  - Muestra una tabla con el detalle del evento seleccionado.
+  ![image](https://github.com/user-attachments/assets/dd96027e-fb4d-4a46-a7c1-4a02f2cfe08f)
+
+- **Eliminar evento:**
+  - Vista: `Delete.cshtml`
+  - Muestra información del evento a eliminar.
+  ![image](https://github.com/user-attachments/assets/0b1bd44f-d246-41cf-9c87-e19721084474)
+
+
+
+### Controladores
 
 ```csharp
-public ActionResult Index() {
-    var eventos = db.Eventos.ToList();
-    return View(eventos);
+namespace AdministracionEventos.Controllers
+{
+    public class EventoController : Controller
+    {
+        // GET: Evento
+        public ActionResult Index()
+        {
+            using (DbModels context = new DbModels())
+            {
+                return View(context.Evento.ToList());
+            }
+        }
+
+        // GET: Evento/Details/5
+        public ActionResult Details(int id)
+        {
+            using (DbModels context = new DbModels())
+            {
+                Evento evento = context.Evento.FirstOrDefault(x => x.ID == id);
+
+                if (evento == null)
+                {
+                    return HttpNotFound();  
+                }
+
+                return View(evento);  
+            }
+        }
+
+        // GET: Evento/Create
+        public ActionResult Create()
+        {
+            return View();
+        }
+
+        // POST: Evento/Create
+        [HttpPost]
+        public ActionResult Create(Evento evento)
+        {
+            try
+            {
+                using (DbModels context = new DbModels())
+                {
+                    context.Evento.Add(evento);
+                    context.SaveChanges();
+                }
+
+                return RedirectToAction("Index");
+            }
+            catch
+            {
+                return View();
+            }
+        }
+
+        // GET: Evento/Edit/5
+        public ActionResult Edit(int id)
+        {
+            using (DbModels context = new DbModels())
+            {
+                var evento = context.Evento.FirstOrDefault(x => x.ID == id);
+
+                if (evento == null)
+                {
+                    return HttpNotFound(); 
+                }
+
+                var usuarios = context.Usuario.ToList(); 
+                ViewBag.Usuarios = new SelectList(usuarios, "ID", "Nombre", evento.UsuarioID);
+
+                return View(evento);
+            }
+        }
+
+
+
+        // POST: Evento/Edit/5
+        [HttpPost]
+        public ActionResult Edit(int id, Evento evento)
+        {
+            try
+            {
+                using (DbModels context = new DbModels())
+                {
+                    context.Entry(evento).State = EntityState.Modified;
+                    context.SaveChanges();
+                }
+                return RedirectToAction("Index");
+            }
+            catch
+            {
+                return View();
+            }
+        }
+
+        // GET: Evento/Delete/5
+        public ActionResult Delete(int id)
+        {
+            using (DbModels context = new DbModels())
+            {
+                return View(context.Evento.Where(x => x.ID == id).FirstOrDefault());
+            }
+        }
+
+        // POST: Evento/Delete/5
+        [HttpPost]
+        public ActionResult Delete(int id, FormCollection collection)
+        {
+            try
+            {
+                using (DbModels context = new DbModels())
+                { 
+                    Evento evento = context.Evento.Where(x=>x.ID == id).FirstOrDefault();
+                    context.Evento.Remove(evento);
+                    context.SaveChanges();
+                }
+                return RedirectToAction("Index");
+            }
+            catch
+            {
+                return View();
+            }
+        }
+    }
 }
+
 ```
 
-### Formato de fecha
 La propiedad `Fecha` en el modelo se configura con un formato de visualización:
 
 ```csharp
