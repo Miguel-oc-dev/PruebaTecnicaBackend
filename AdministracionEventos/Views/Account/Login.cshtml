@@ -1,0 +1,111 @@
+﻿@model AdministracionEventos.Models.Usuario
+
+@{
+    ViewBag.Title = "Iniciar sesión";
+}
+
+@section Styles {
+    <style>
+        body {
+            background-color: #e9ecef;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        .login-container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+
+        .card {
+            width: 100%;
+            max-width: 400px;
+            padding: 30px;
+            background-color: #fff;
+            border-radius: 10px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+        }
+
+        .card-header {
+            text-align: center;
+            font-size: 24px;
+            color: #333;
+            margin-bottom: 20px;
+        }
+
+        .form-group label {
+            font-weight: bold;
+            color: #495057;
+        }
+
+        .form-control {
+            border-radius: 8px;
+            border: 1px solid #ced4da;
+            padding: 15px;
+            margin-bottom: 15px;
+            font-size: 16px;
+        }
+
+            .form-control:focus {
+                border-color: #007bff;
+                box-shadow: 0 0 10px rgba(0, 123, 255, 0.2);
+            }
+
+        .btn-primary {
+            background-color: #007bff;
+            border-color: #007bff;
+            padding: 12px 20px;
+            width: 100%;
+            font-size: 18px;
+            border-radius: 8px;
+        }
+
+            .btn-primary:hover {
+                background-color: #0056b3;
+                border-color: #0056b3;
+            }
+
+        .footer-text {
+            text-align: center;
+            margin-top: 20px;
+            font-size: 14px;
+            color: #6c757d;
+        }
+    </style>
+}
+
+<h2 class="text-center mb-4">Iniciar sesión</h2>
+
+<div class="login-container">
+    <div class="card">
+        <div class="card-header">
+            <strong>Bienvenido</strong>
+        </div>
+
+        @using (Html.BeginForm())
+        {
+            @Html.AntiForgeryToken()
+
+            <div class="form-group">
+                @Html.LabelFor(model => model.Correo, htmlAttributes: new { @class = "control-label" })
+                @Html.TextBoxFor(model => model.Correo, new { @class = "form-control", placeholder = "Correo electrónico" })
+                @Html.ValidationMessageFor(model => model.Correo, "", new { @class = "text-danger" })
+            </div>
+
+            <div class="form-group">
+                @Html.LabelFor(model => model.Contraseña, htmlAttributes: new { @class = "control-label" })
+                @Html.PasswordFor(model => model.Contraseña, new { @class = "form-control", placeholder = "Contraseña" })
+                @Html.ValidationMessageFor(model => model.Contraseña, "", new { @class = "text-danger" })
+            </div>
+
+            <div class="form-group">
+                <button type="submit" class="btn btn-primary">Iniciar sesión</button>
+            </div>
+
+            <div class="footer-text">
+                ¿No tienes una cuenta? <a href="/Account/Register">Regístrate aquí</a>
+            </div>
+        }
+    </div>
+</div>

@@ -1,0 +1,26 @@
+# Ignorar configuraciones locales de Visual Studio
+.vs/
+*.suo
+*.user
+
+# Ignorar carpetas de compilación
+bin/
+obj/
+
+# Ignorar paquetes NuGet
+packages/
+*.nupkg
+project.lock.json
+project.fragment.lock.json
+
+# Ignorar archivos temporales
+*.tmp
+*.log
+*.bak
+*.swp
+
+# Ignorar configuraciones locales de usuario
+*.ide
+
+# Ignorar archivos de publicación
+*.publishsettings

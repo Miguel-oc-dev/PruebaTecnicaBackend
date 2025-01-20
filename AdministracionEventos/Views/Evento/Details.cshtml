@@ -1,0 +1,48 @@
+﻿@model AdministracionEventos.Models.Evento
+
+@{
+    ViewBag.Title = "Detalles del Evento";
+}
+
+<div class="container mt-4">
+    <h1 class="text-center mb-4">Detalles del Evento</h1>
+
+    <div class="card">
+        <div class="card-body">
+            <h4 class="card-title mb-3">Evento: @Html.DisplayFor(model => model.Titulo)</h4>
+
+            <div class="mb-3 row">
+                <label class="col-sm-2 col-form-label"><strong>Descripción</strong></label>
+                <div class="col-sm-10">
+                    <p>@Html.DisplayFor(model => model.Descripcion)</p>
+                </div>
+            </div>
+
+            <div class="mb-3 row">
+                <label class="col-sm-2 col-form-label"><strong>Lugar</strong></label>
+                <div class="col-sm-10">
+                    <p>@Html.DisplayFor(model => model.Lugar)</p>
+                </div>
+            </div>
+
+            <div class="mb-3 row">
+                <label class="col-sm-2 col-form-label"><strong>Fecha</strong></label>
+                <div class="col-sm-10">
+                    <p>@Html.DisplayFor(model => model.Fecha)</p>
+                </div>
+            </div>
+
+            <div class="mb-3 row">
+                <label class="col-sm-2 col-form-label"><strong>Usuario</strong></label>
+                <div class="col-sm-10">
+                    <p>@Html.DisplayFor(model => model.UsuarioID)</p>
+                </div>
+            </div>
+
+            <div class="d-flex justify-content-between">
+                <a class="btn btn-warning" href="@Url.Action("Edit", new { id = Model.ID })">Editar Evento</a>
+                <a class="btn btn-secondary" href="@Url.Action("Index")">Volver a la Lista</a>
+            </div>
+        </div>
+    </div>
+</div>
